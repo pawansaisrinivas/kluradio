@@ -2,22 +2,25 @@ import TeamMemberCard from "@/components/team/TeamMemberCard";
 import { Users, Star, GraduationCap } from "lucide-react";
 
 const heads = [
-  { name: "Pawan Sai Srinivas", role: "Station Head", image: "https://placehold.co/400x400", hint: "person portrait" },
-  { name: "Brenda Smith", role: "Programming Head", image: "https://placehold.co/400x400", hint: "person smiling" },
-  { name: "Charles Brown", role: "Music Head", image: "https://placehold.co/400x400", hint: "man glasses" },
-  { name: "Diana Prince", role: "Marketing Head", image: "https://placehold.co/400x400", hint: "woman leader" },
-  { name: "Ethan Hunt", role: "Technical Head", image: "https://placehold.co/400x400", hint: "man engineer" },
-  { name: "Fiona Glenanne", role: "Events Head", image: "https://placehold.co/400x400", hint: "woman planner" },
-  { name: "George King", role: "Content Head", image: "https://placehold.co/400x400", hint: "writer thinking" },
+  { name: "Pawan Sai Srinivas", role: "Station Head", image: "https://placehold.co/400x400.png", hint: "person portrait" },
+  { name: "M P Sri Ramya", role: "RJ Head", image: "https://placehold.co/400x400.png", hint: "person smiling" },
+  { name: "Shaik Mohammad Junaid", role: "Technical Head", image: "https://placehold.co/400x400.png", hint: "man glasses" },
+  { name: "Manikanta", role: "Creative Head", image: "https://placehold.co/400x400.png", hint: "woman leader" },
+  { name: "BhanuPrakash", role: "Broadcasting Head", image: "https://placehold.co/400x400.png", hint: "man engineer" },
+  { name: "Navya Sukrutha", role: "Designing Head", image: "https://placehold.co/400x400.png", hint: "woman planner" },
+  { name: "B Phanindra", role: "PR Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
+  { name: "Hari", role: "Marketing Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
+  { name: "Anurag Kaushal", role: "Video Editing Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
+
 ];
 
-const advisors = [
-  { name: "Dr. Evelyn Reed", role: "Media Advisor", image: "https://placehold.co/400x400", hint: "professional woman" },
-  { name: "Mr. Samuel Carter", role: "Technical Advisor", image: "https://placehold.co/400x400", hint: "professional man" },
-];
+// const advisors = [
+//   { name: "Dr. Evelyn Reed", role: "Media Advisor", image: "https://placehold.co/400x400", hint: "professional woman" },
+//   { name: "Mr. Samuel Carter", role: "Technical Advisor", image: "https://placehold.co/400x400", hint: "professional man" },
+// ];
 
 const faculty = [
-  { name: "Prof. Harriet Winslow", role: "Faculty Professor In-Charge", image: "https://placehold.co/400x400", hint: "professor woman" },
+  { name: "Dr. M Shiva Kumar", role: "Faculty Professor In-Charge", image: "https://placehold.co/400x400.png", hint: "professor woman" },
 ];
 
 
@@ -32,7 +35,7 @@ export default function TeamPage() {
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
             <Users className="w-8 h-8 text-primary"/>
-            Our 7 Heads
+            Our Heads
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {heads.map((member) => (
@@ -41,7 +44,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
         <section>
           <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
               <Star className="w-8 h-8 text-primary"/>
@@ -52,7 +55,7 @@ export default function TeamPage() {
               <TeamMemberCard key={member.name} {...member} />
             ))}
           </div>
-        </section>
+        </section> */}
 
         <section>
           <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
@@ -66,6 +69,5 @@ export default function TeamPage() {
           </div>
         </section>
       </div>
-    </div>
   );
 }
