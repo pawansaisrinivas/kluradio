@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface User {
@@ -58,10 +59,59 @@ const initialPosts: Post[] = [
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [recruitmentOpen, setRecruitmentOpen] = useState<boolean>(false);
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    try {
+        const storedPosts = localStorage.getItem("klradio-posts");
+        if (storedPosts) {
+            setPosts(JSON.parse(storedPosts));
+        } else {
+            setPosts(initialPosts);
+        }
+
+        const storedApplicants = localStorage.getItem("klradio-applicants");
+        if (storedApplicants) {
+            setApplicants(JSON.parse(storedApplicants));
+        }
+
+        const storedRecruitmentStatus = localStorage.getItem("klradio-recruitment-open");
+        if (storedRecruitmentStatus) {
+            setRecruitmentOpen(JSON.parse(storedRecruitmentStatus));
+        }
+    } catch (error) {
+        console.error("Failed to parse from localStorage", error);
+        setPosts(initialPosts);
+    }
+  }, []);
+  
+  useEffect(() => {
+    try {
+        localStorage.setItem("klradio-posts", JSON.stringify(posts));
+    } catch (error) {
+        console.error("Failed to save posts to localStorage", error);
+    }
+  }, [posts]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("klradio-applicants", JSON.stringify(applicants));
+    } catch (error) {
+        console.error("Failed to save applicants to localStorage", error);
+    }
+  }, [applicants]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("klradio-recruitment-open", JSON.stringify(recruitmentOpen));
+    } catch (error) {
+        console.error("Failed to save recruitment status to localStorage", error);
+    }
+  }, [recruitmentOpen]);
+
 
   const login = (username: string) => {
     const role = username.toLowerCase() === "admin" ? "admin" : "member";
