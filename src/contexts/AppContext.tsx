@@ -14,14 +14,23 @@ interface Post {
   content: string;
 }
 
+export interface Applicant {
+  fullName: string;
+  email: string;
+  department: string;
+  reason: string;
+}
+
 interface AppContextType {
   user: User | null;
   posts: Post[];
   recruitmentOpen: boolean;
+  applicants: Applicant[];
   login: (username: string) => void;
   logout: () => void;
   addPost: (post: Omit<Post, "id">) => void;
   toggleRecruitment: () => void;
+  addApplicant: (applicant: Applicant) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -51,6 +60,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [recruitmentOpen, setRecruitmentOpen] = useState<boolean>(false);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
   const router = useRouter();
 
   const login = (username: string) => {
@@ -76,15 +86,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const toggleRecruitment = () => {
     setRecruitmentOpen((prev) => !prev);
   };
+  
+  const addApplicant = (applicant: Applicant) => {
+    setApplicants((prevApplicants) => [...prevApplicants, applicant]);
+  };
 
   const value = {
     user,
     posts,
     recruitmentOpen,
+    applicants,
     login,
     logout,
     addPost,
     toggleRecruitment,
+    addApplicant,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

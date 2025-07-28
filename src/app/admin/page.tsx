@@ -15,12 +15,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircle, FileText, Megaphone, PlusCircle } from "lucide-react";
+import { AlertCircle, FileText, Megaphone, PlusCircle, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 export default function AdminPage() {
-  const { user, addPost, recruitmentOpen, toggleRecruitment, posts } = useAppContext();
+  const { user, addPost, recruitmentOpen, toggleRecruitment, posts, applicants } = useAppContext();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -139,7 +148,7 @@ export default function AdminPage() {
           </Card>
         </div>
 
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-8">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -166,6 +175,47 @@ export default function AdminPage() {
                   aria-label="Toggle recruitment form"
                 />
               </div>
+            </CardContent>
+          </Card>
+
+           <Card>
+            <CardHeader>
+               <CardTitle className="flex items-center gap-2">
+                <Users className="text-primary" />
+                Recruitment Applicants
+              </CardTitle>
+              <CardDescription>
+                View all applications submitted for open positions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+                {applicants.length > 0 ? (
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Applicant</TableHead>
+                                <TableHead>Department</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {applicants.map((applicant, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <div className="font-medium">{applicant.fullName}</div>
+                                        <div className="text-xs text-muted-foreground">{applicant.email}</div>
+                                    </TableCell>
+                                    <TableCell>
+                                      <Badge variant="outline">{applicant.department}</Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                ) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                        No applications yet.
+                    </p>
+                )}
             </CardContent>
           </Card>
         </div>

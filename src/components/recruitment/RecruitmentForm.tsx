@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useAppContext } from "@/contexts/AppContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -39,6 +40,7 @@ const formSchema = z.object({
 
 export default function RecruitmentForm() {
   const { toast } = useToast();
+  const { addApplicant } = useAppContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +52,7 @@ export default function RecruitmentForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Recruitment Form Data:", values);
+    addApplicant(values);
     toast({
       title: "Application Submitted! 🎉",
       description: "Thank you for your interest. We will be in touch soon.",
