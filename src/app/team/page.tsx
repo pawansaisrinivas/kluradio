@@ -31,7 +31,7 @@ export default function TeamPage() {
       
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
-            <Users className="w-8 h-8 text-accent"/>
+            <Users className="w-8 h-8 text-primary"/>
             Our 7 Heads
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -44,7 +44,7 @@ export default function TeamPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
         <section>
           <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
-              <Star className="w-8 h-8 text-accent"/>
+              <Star className="w-8 h-8 text-primary"/>
               Our Advisors
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -56,7 +56,7 @@ export default function TeamPage() {
 
         <section>
           <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
-            <GraduationCap className="w-8 h-8 text-accent"/>
+            <GraduationCap className="w-8 h-8 text-primary"/>
             Faculty In-Charge
           </h2>
           <div className="flex justify-center">

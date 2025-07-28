@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <div className="space-y-12">
-      <section className="text-center bg-card p-8 rounded-lg shadow-md">
+      <section className="text-center bg-card p-8 rounded-lg shadow-md border">
         <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary mb-4">
           Welcome to KL Radio Hub
         </h1>
@@ -40,7 +40,7 @@ export default function Home() {
               <Card key={post.id} className="flex flex-col">
                 <CardHeader>
                   <CardTitle className="flex items-start gap-3">
-                    <Rss className="w-6 h-6 text-accent mt-1 flex-shrink-0" />
+                    <Rss className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
                     <span className="flex-grow">{post.title}</span>
                   </CardTitle>
                 </CardHeader>

@@ -7,11 +7,9 @@ export default function Footer() {
     <footer className="bg-secondary text-secondary-foreground border-t">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-          <div>
-            <div className="flex justify-center md:justify-start mb-4">
-              <Logo />
-            </div>
-            <p className="text-sm">
+          <div className="flex flex-col items-center md:items-start">
+            <Logo />
+            <p className="text-sm mt-4 text-center md:text-left">
               The sound of our campus. Tune in for music, news, and events.
             </p>
           </div>
