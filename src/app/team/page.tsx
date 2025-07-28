@@ -2,7 +2,7 @@ import TeamMemberCard from "@/components/team/TeamMemberCard";
 import { Users, Star, GraduationCap } from "lucide-react";
 
 const heads = [
-  { name: "Alex Johnson", role: "Station Head", image: "https://placehold.co/400x400", hint: "person portrait" },
+  { name: "Pawan Sai Srinivas", role: "Station Head", image: "https://placehold.co/400x400", hint: "person portrait" },
   { name: "Brenda Smith", role: "Programming Head", image: "https://placehold.co/400x400", hint: "person smiling" },
   { name: "Charles Brown", role: "Music Head", image: "https://placehold.co/400x400", hint: "man glasses" },
   { name: "Diana Prince", role: "Marketing Head", image: "https://placehold.co/400x400", hint: "woman leader" },
