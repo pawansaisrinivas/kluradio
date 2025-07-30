@@ -1,12 +1,29 @@
+
 "use client";
 
 import RecruitmentForm from "@/components/recruitment/RecruitmentForm";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppContext } from "@/contexts/AppContext";
-import { PartyPopper, XCircle } from "lucide-react";
+import { Loader2, PartyPopper, XCircle } from "lucide-react";
 
 export default function RecruitmentPage() {
   const { recruitmentOpen } = useAppContext();
+
+  // Show a loading state while we fetch the recruitment status
+  if (recruitmentOpen === null) {
+    return (
+      <div className="flex justify-center items-center h-full py-12">
+        <Alert className="max-w-md">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <AlertTitle>Loading...</AlertTitle>
+            <AlertDescription>
+            Just a moment, we're checking the recruitment status.
+            </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
