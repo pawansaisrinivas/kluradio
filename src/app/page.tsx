@@ -15,7 +15,7 @@ export default function Home() {
       <section className="bg-card p-8 rounded-lg shadow-md border">
         <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary mb-2">
-                🎙️ Welcome to KL RADIO – Voice of the Campus!
+                🎙️ Welcome to KL RADIO – The Voice of KLUians!
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground font-semibold">
                 Tune in. Speak out. Stand out.
@@ -33,7 +33,7 @@ export default function Home() {
                 <h2 className="text-2xl font-bold font-headline mb-4 text-primary flex items-center gap-2"><List className="w-6 h-6"/>What We Do:</h2>
                 <ul className="space-y-3 list-inside">
                     <li className="flex items-start gap-2">🎧 <span className="flex-1">Stream dynamic music playlists curated by students</span></li>
-                    <li className="flex items-start gap-2">🗣️ <span className="flex-1">Host live shows, interviews, and debates</span></li>
+                    <li className="flex items-start gap-2">🗣️ <span className="flex-1">Host live shows, faculty interviews, and podcasts</span></li>
                     <li className="flex items-start gap-2">🎤 <span className="flex-1">Share student stories, achievements, and events</span></li>
                     <li className="flex items-start gap-2">📢 <span className="flex-1">Offer campus updates and event highlights</span></li>
                     <li className="flex items-start gap-2">🎬 <span className="flex-1">Bring behind-the-scenes fun and creative projects</span></li>
