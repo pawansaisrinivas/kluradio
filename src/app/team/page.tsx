@@ -10,14 +10,9 @@ const heads = [
   { name: "Navya Sukrutha", role: "Designing Head", image: "/images/Navya_Sukrutha.png", hint: "woman planner" },
   { name: "B Phanindra", role: "PR Head", image: "/images/B_Phanindra.png", hint: "writer thinking" },
   { name: "Hari", role: "Marketing Head", image: "/images/Hari.png", hint: "writer thinking" },
-  { name: "Anurag Kaushal", role: "Video Editing Head", image: "/images/Anurag_Kaushal.png", hint: "writer thinking" },
+  { name: "Anurag Kaushal", role: "Video Editing Head", image: "/images/anurag.jpg", hint: "writer thinking" },
 
 ];
-
-// const advisors = [
-//   { name: "Dr. Evelyn Reed", role: "Media Advisor", image: "https://placehold.co/400x400", hint: "professional woman" },
-//   { name: "Mr. Samuel Carter", role: "Technical Advisor", image: "https://placehold.co/400x400", hint: "professional man" },
-// ];
 
 const faculty = [
   { name: "Dr. M Shiva Kumar", role: "Faculty Professor In-Charge", image: "/images/Dr_M_Shiva_Kumar.png", hint: "professor woman" },
@@ -43,19 +38,6 @@ export default function TeamPage() {
           ))}
         </div>
       </section>
-
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-        <section>
-          <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
-              <Star className="w-8 h-8 text-primary"/>
-              Our Advisors
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {advisors.map((member) => (
-              <TeamMemberCard key={member.name} {...member} />
-            ))}
-          </div>
-        </section> */}
 
         <section>
           <h2 className="text-3xl font-bold font-headline text-center mb-8 flex items-center justify-center gap-3">
