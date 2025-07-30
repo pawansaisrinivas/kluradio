@@ -83,12 +83,10 @@ export default function AdminPage() {
         } else {
             setRecruitmentOpen(false);
         }
-    });
-
-    // We can consider loading finished once we get the recruitment status
-    Promise.all([new Promise(resolve => onSnapshot(recruitmentRef, resolve))]).then(() => {
+        // Once we get the recruitment status, we can stop the main loader.
         setLoading(false);
     });
+
 
     return () => {
       unsubPosts();
@@ -98,6 +96,8 @@ export default function AdminPage() {
   }, [user]);
 
   useEffect(() => {
+    // This effect handles redirection if the user is not an admin.
+    // It runs after the initial loading state is resolved.
     if (!loading && user?.role !== "admin") {
       toast({
         variant: "destructive",
@@ -165,9 +165,9 @@ export default function AdminPage() {
         <div className="flex justify-center items-center h-full">
             <Alert className="max-w-md">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Authenticating...</AlertTitle>
+                <AlertTitle>Authenticating & Loading Data...</AlertTitle>
                 <AlertDescription>
-                Please wait while we verify your access rights.
+                Please wait while we verify your access and load the dashboard.
                 </AlertDescription>
             </Alert>
         </div>
