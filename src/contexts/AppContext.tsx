@@ -43,7 +43,7 @@ export interface Applicant {
 interface AppContextType {
   user: User | null;
   posts: Post[];
-  recruitmentOpen: boolean;
+  recruitmentOpen: boolean | null;
   applicants: Applicant[];
   login: (username: string) => void;
   logout: () => void;
@@ -59,7 +59,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [recruitmentOpen, setRecruitmentOpen] = useState<boolean>(true);
+  const [recruitmentOpen, setRecruitmentOpen] = useState<boolean | null>(null);
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const router = useRouter();
 
@@ -136,6 +136,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const toggleRecruitment = async () => {
     const docRef = doc(db, "settings", "recruitment");
     const currentStatus = recruitmentOpen;
+    // Don't do anything if status is not loaded yet
+    if (currentStatus === null) return;
+    
     // Optimistically update the UI
     setRecruitmentOpen(!currentStatus);
     // Then update Firestore
