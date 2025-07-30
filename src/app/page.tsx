@@ -1,14 +1,36 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAppContext } from "@/contexts/AppContext";
 import { List, Newspaper, Rss } from "lucide-react";
 import Link from "next/link";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+}
 
 export default function Home() {
-  const { posts } = useAppContext();
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(postsQuery, (snapshot) => {
+      const postsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title,
+        content: doc.data().content,
+      })) as Post[];
+      setPosts(postsData);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="space-y-12">
