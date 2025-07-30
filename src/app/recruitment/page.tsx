@@ -17,7 +17,8 @@ export default function RecruitmentPage() {
       if (doc.exists()) {
         setRecruitmentOpen(doc.data().isOpen);
       } else {
-        setRecruitmentOpen(false);
+        // Default to open if the setting doesn't exist in the database yet.
+        setRecruitmentOpen(true);
       }
     });
     return () => unsub();
