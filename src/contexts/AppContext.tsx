@@ -30,6 +30,7 @@ interface AppContextType {
   login: (username: string) => void;
   logout: () => void;
   addPost: (post: Omit<Post, "id">) => void;
+  deletePost: (postId: string) => void;
   toggleRecruitment: () => void;
   addApplicant: (applicant: Applicant) => void;
 }
@@ -39,21 +40,21 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 const initialPosts: Post[] = [
   {
     id: "1",
-    title: "Welcome to the New KL Radio Hub!",
+    title: "B.Tech. EEE (VLSI Design and Technology) in collaboration with TESSOLVE",
     content:
-      "This is the official new portal for all things KL Radio. Stay tuned for exciting updates, events, and music!",
+      "KL Deemed to be University, in collaboration with TESSOLVE, offers a B.Tech. program in EEE (VLSI Design and Technology).",
   },
   {
     id: "2",
-    title: "Annual Music Fest Auditions Open",
+    title: "NIRF Ranking 2023",
     content:
-      "Dream of performing? Auditions for the annual campus Music Fest are now open. Sign up in the music room before Friday.",
+      "KLU has been ranked 28th among all public and private universities in India by the NIRF Ranking 2023.",
   },
   {
     id: "3",
-    title: "Special Guest DJ This Weekend",
+    title: "KL University Admission 2024",
     content:
-      "Get ready! A renowned guest DJ will be taking over our weekend broadcast. Don't miss out on the electrifying mixes.",
+      "Admissions are open for the academic year 2024. Apply now for various undergraduate and postgraduate programs.",
   },
 ];
 
@@ -133,6 +134,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
+  const deletePost = (postId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   const toggleRecruitment = () => {
     setRecruitmentOpen((prev) => !prev);
   };
@@ -149,6 +154,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     login,
     logout,
     addPost,
+    deletePost,
     toggleRecruitment,
     addApplicant,
   };

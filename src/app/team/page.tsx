@@ -2,20 +2,20 @@ import TeamMemberCard from "@/components/team/TeamMemberCard";
 import { Users, GraduationCap } from "lucide-react";
 
 const heads = [
-  { name: "Pawan Sai Srinivas", role: "Station Head", image: "https://placehold.co/400x400.png", hint: "person portrait" },
-  { name: "M P Sri Ramya", role: "RJ Head", image: "https://placehold.co/400x400.png", hint: "person smiling" },
-  { name: "Shaik Mohammad Junaid", role: "Technical Head", image: "https://placehold.co/400x400.png", hint: "man glasses" },
-  { name: "Manikanta", role: "Creative Head", image: "https://placehold.co/400x400.png", hint: "woman leader" },
-  { name: "BhanuPrakash", role: "Broadcasting Head", image: "https://placehold.co/400x400.png", hint: "man engineer" },
-  { name: "Navya Sukrutha", role: "Designing Head", image: "https://placehold.co/400x400.png", hint: "woman planner" },
-  { name: "B Phanindra", role: "PR Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
-  { name: "Hari", role: "Marketing Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
-  { name: "Anurag Kaushal", role: "Video Editing Head", image: "https://placehold.co/400x400.png", hint: "writer thinking" },
-
+  { name: "Pawan Sai Srinivas", role: "Station Head", image: "/images/pawan.jpeg" },
+  { name: "M P Sri Ramya", role: "RJ Head", image: "/images/ramya.jpg" },
+  { name: "Shaik Mohammad Junaid", role: "Technical Head", image: "/images/junaid.jpg" },
+  { name: "Manikanta", role: "Creative Head", image: "/images/manikanta.jpg" },
+  { name: "BhanuPrakash", role: "Broadcasting Head", image: "/images/bhanu.jpeg" },
+  { name: "Navya Sukrutha", role: "Designing Head", image: "/images/navya.jpg" },
+  { name: "Baba Charan", role: "Designing Head", image: "/images/charan.png" },
+  { name: "B Phanindra", role: "PR Head", image: "/images/phani.jpg" },
+  { name: "Hari", role: "Marketing Head", image: "/images/hari.png" },
+  { name: "Anurag Kaushal", role: "Video Editing Head", image: "/images/anurag.jpg" },
 ];
 
 const faculty = [
-  { name: "Dr. M Shiva Kumar", role: "Faculty Professor In-Charge", image: "https://placehold.co/400x400.png", hint: "professor woman" },
+  { name: "Dr. M Shiva Kumar", role: "Faculty Professor In-Charge", image: "/images/msk.jpg" },
 ];
 
 

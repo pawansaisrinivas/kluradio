@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircle, FileText, Megaphone, PlusCircle, Users } from "lucide-react";
+import { AlertCircle, FileText, Megaphone, PlusCircle, Trash2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -29,7 +30,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export default function AdminPage() {
-  const { user, addPost, recruitmentOpen, toggleRecruitment, posts, applicants } = useAppContext();
+  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants } = useAppContext();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -63,6 +64,15 @@ export default function AdminPage() {
       setTitle("");
       setContent("");
     }
+  };
+  
+  const handleDeletePost = (postId: string) => {
+    deletePost(postId);
+    toast({
+      variant: "destructive",
+      title: "Post Deleted",
+      description: "The announcement has been removed.",
+    });
   };
 
   if (!isMounted || user?.role !== "admin") {
@@ -138,9 +148,14 @@ export default function AdminPage() {
             <CardContent>
                 <ul className="space-y-4">
                     {posts.map(post => (
-                        <li key={post.id} className="border-l-4 border-primary pl-4 py-2 bg-secondary/50 rounded-r-md">
-                            <h4 className="font-bold">{post.title}</h4>
-                            <p className="text-sm text-muted-foreground">{post.content}</p>
+                        <li key={post.id} className="flex items-start justify-between gap-4 border-l-4 border-primary pl-4 py-2 bg-secondary/50 rounded-r-md">
+                            <div className="flex-grow">
+                                <h4 className="font-bold">{post.title}</h4>
+                                <p className="text-sm text-muted-foreground">{post.content}</p>
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={() => handleDeletePost(post.id)} aria-label="Delete post">
+                                <Trash2 className="h-4 w-4 text-destructive"/>
+                            </Button>
                         </li>
                     ))}
                 </ul>

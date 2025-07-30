@@ -13,13 +13,14 @@ export default function TeamMemberCard({ name, role, image, hint }: TeamMemberCa
     <Card className="text-center overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       <CardContent className="p-0">
         <div className="aspect-square relative">
-            <Image
-                src={image}
-                alt={`Portrait of ${name}`}
-                fill
-                className="object-cover"
-                data-ai-hint={hint}
-            />
+          <Image
+            src={image}
+            alt={`Portrait of ${name}`}
+            fill
+            className="object-cover object-top"  // Ensures face is near the top part
+            data-ai-hint={hint}
+            priority
+          />
         </div>
       </CardContent>
       <CardFooter className="flex flex-col p-4">
