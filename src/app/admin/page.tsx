@@ -29,22 +29,76 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot, query, orderBy, doc } from "firebase/firestore";
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface Applicant {
+  id: string;
+  fullName: string;
+  email: string;
+  wing: string;
+}
 
 export default function AdminPage() {
-  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants, deleteApplicant, loading } = useAppContext();
+  const { user, addPost, deletePost, toggleRecruitment, deleteApplicant } = useAppContext();
   const router = useRouter();
   const { toast } = useToast();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [recruitmentOpen, setRecruitmentOpen] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (user?.role !== "admin") {
+      // Non-admins will be redirected by the main check below
+      return;
+    }
+
+    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const applicantsQuery = query(collection(db, "applicants"), orderBy("fullName"));
+    const recruitmentRef = doc(db, "settings", "recruitment");
+
+    const unsubPosts = onSnapshot(postsQuery, (snapshot) => {
+      const postsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Post[];
+      setPosts(postsData);
+    });
+
+    const unsubApplicants = onSnapshot(applicantsQuery, (snapshot) => {
+      const applicantsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Applicant[];
+      setApplicants(applicantsData);
+    });
+
+    const unsubRecruitment = onSnapshot(recruitmentRef, (doc) => {
+        if (doc.exists()) {
+            setRecruitmentOpen(doc.data().isOpen);
+        } else {
+            setRecruitmentOpen(false);
+        }
+    });
+
+    // We can consider loading finished once we get the recruitment status
+    Promise.all([new Promise(resolve => onSnapshot(recruitmentRef, resolve))]).then(() => {
+        setLoading(false);
+    });
+
+    return () => {
+      unsubPosts();
+      unsubApplicants();
+      unsubRecruitment();
+    };
+  }, [user]);
 
   useEffect(() => {
-    if (isMounted && !loading && user?.role !== "admin") {
+    if (!loading && user?.role !== "admin") {
       toast({
         variant: "destructive",
         title: "Access Denied",
@@ -52,7 +106,7 @@ export default function AdminPage() {
       });
       router.push("/login");
     }
-  }, [user, router, toast, isMounted, loading]);
+  }, [user, router, toast, loading]);
 
   const handleAddPost = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +160,7 @@ export default function AdminPage() {
   };
 
 
-  if (loading || !isMounted || user?.role !== "admin") {
+  if (loading || user?.role !== "admin") {
     return (
         <div className="flex justify-center items-center h-full">
             <Alert className="max-w-md">
@@ -222,9 +276,10 @@ export default function AdminPage() {
                   </p>
                 </div>
                 <Switch
-                  checked={recruitmentOpen}
-                  onCheckedChange={toggleRecruitment}
+                  checked={recruitmentOpen ?? false}
+                  onCheckedChange={() => toggleRecruitment(recruitmentOpen!)}
                   aria-label="Toggle recruitment form"
+                  disabled={recruitmentOpen === null}
                 />
               </div>
             </CardContent>
@@ -287,4 +342,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
