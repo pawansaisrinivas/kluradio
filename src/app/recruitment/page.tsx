@@ -8,10 +8,10 @@ import { useAppContext } from "@/contexts/AppContext";
 import { Loader2, PartyPopper, XCircle } from "lucide-react";
 
 export default function RecruitmentPage() {
-  const { recruitmentOpen } = useAppContext();
+  const { recruitmentOpen, loading } = useAppContext();
 
   // Show a loading state while we fetch the recruitment status
-  if (recruitmentOpen === null) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-full py-12">
         <Alert className="max-w-md">
