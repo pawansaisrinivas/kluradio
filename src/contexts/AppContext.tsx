@@ -43,8 +43,9 @@ export interface Applicant {
 interface AppContextType {
   user: User | null;
   posts: Post[];
-  recruitmentOpen: boolean | null;
+  recruitmentOpen: boolean;
   applicants: Applicant[];
+  loading: boolean; // Global loading state
   login: (username: string) => void;
   logout: () => void;
   addPost: (post: Omit<Post, "id" | "createdAt">) => void;
@@ -59,30 +60,28 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [recruitmentOpen, setRecruitmentOpen] = useState<boolean | null>(null);
+  const [recruitmentOpen, setRecruitmentOpen] = useState(false); // Default to false
   const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch recruitment status from Firestore
-    const docRef = doc(db, "settings", "recruitment");
-    const unsubscribe = onSnapshot(docRef, (doc) => {
+    setLoading(true);
+    const recruitmentRef = doc(db, "settings", "recruitment");
+    
+    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const applicantsQuery = query(collection(db, "applicants"), orderBy("fullName"));
+
+    const unsubRecruitment = onSnapshot(recruitmentRef, (doc) => {
       if (doc.exists()) {
         setRecruitmentOpen(doc.data().isOpen);
       } else {
-        // If the document doesn't exist, create it with a default value
-        setDoc(docRef, { isOpen: true });
-        setRecruitmentOpen(true);
+        setDoc(recruitmentRef, { isOpen: false });
+        setRecruitmentOpen(false);
       }
     });
 
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // Fetch posts from Firestore in real-time
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubPosts = onSnapshot(postsQuery, (snapshot) => {
       const postsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -90,20 +89,27 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       })) as Post[];
       setPosts(postsData);
     });
-    return () => unsubscribe();
-  }, []);
-  
-  useEffect(() => {
-    // Fetch applicants from Firestore in real-time
-    const q = query(collection(db, "applicants"), orderBy("fullName"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    
+    const unsubApplicants = onSnapshot(applicantsQuery, (snapshot) => {
       const applicantsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       })) as Applicant[];
       setApplicants(applicantsData);
     });
-    return () => unsubscribe();
+
+    // We can consider loading finished once we get the first snapshot of all data.
+    // For simplicity, we'll just use a timeout to give Firestore a moment to load.
+    // A more robust solution might use Promise.all with getDocs initially.
+    const timer = setTimeout(() => setLoading(false), 1500); // Give it 1.5s to load everything
+
+
+    return () => {
+      unsubRecruitment();
+      unsubPosts();
+      unsubApplicants();
+      clearTimeout(timer);
+    };
   }, []);
 
 
@@ -135,20 +141,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleRecruitment = async () => {
     const docRef = doc(db, "settings", "recruitment");
-    const currentStatus = recruitmentOpen;
-    // Don't do anything if status is not loaded yet
-    if (currentStatus === null) return;
-    
-    // Optimistically update the UI
-    setRecruitmentOpen(!currentStatus);
-    // Then update Firestore
-    try {
-        await setDoc(docRef, { isOpen: !currentStatus });
-    } catch (error) {
-        // If the update fails, revert the UI
-        setRecruitmentOpen(currentStatus);
-        console.error("Error toggling recruitment status: ", error);
-    }
+    await setDoc(docRef, { isOpen: !recruitmentOpen });
   };
   
   const addApplicant = async (applicant: Omit<Applicant, "id">) => {
@@ -164,6 +157,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     posts,
     recruitmentOpen,
     applicants,
+    loading,
     login,
     logout,
     addPost,
