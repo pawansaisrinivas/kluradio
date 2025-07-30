@@ -44,13 +44,7 @@ const formSchema = z.object({
   otherDepartment: z.string().optional(),
   regulation: z.string().min(1, { message: "Please select a regulation." }),
   wing: z.string().min(1, { message: "Please select a wing." }),
-  reason: z.string()
-    .refine(value => {
-        const wordCount = value.trim().split(/\s+/).length;
-        return wordCount >= 30 && wordCount <= 100;
-    }, {
-        message: "Your reason must be between 30 and 100 words."
-    }),
+  reason: z.string().min(1, { message: "This field is required." }),
 }).refine(data => {
     if (data.department === 'other' && !data.otherDepartment) {
         return false;
@@ -262,9 +256,6 @@ export default function RecruitmentForm() {
                   {...field}
                 />
               </FormControl>
-               <FormDescription>
-                Your response must be between 30 and 100 words.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
