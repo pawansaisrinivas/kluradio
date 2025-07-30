@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircle, Download, FileText, Megaphone, PlusCircle, Trash2, Users } from "lucide-react";
+import { AlertCircle, Download, FileText, Loader2, Megaphone, PlusCircle, Trash2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -31,7 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export default function AdminPage() {
-  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants, deleteApplicant } = useAppContext();
+  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants, deleteApplicant, loading } = useAppContext();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -44,7 +44,7 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (isMounted && user?.role !== "admin") {
+    if (isMounted && !loading && user?.role !== "admin") {
       toast({
         variant: "destructive",
         title: "Access Denied",
@@ -52,7 +52,7 @@ export default function AdminPage() {
       });
       router.push("/login");
     }
-  }, [user, router, toast, isMounted]);
+  }, [user, router, toast, isMounted, loading]);
 
   const handleAddPost = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,8 +76,8 @@ export default function AdminPage() {
     });
   };
   
-  const handleDeleteApplicant = (regdId: string) => {
-    deleteApplicant(regdId);
+  const handleDeleteApplicant = (applicantId: string) => {
+    deleteApplicant(applicantId);
     toast({
       variant: "destructive",
       title: "Applicant Deleted",
@@ -95,7 +95,7 @@ export default function AdminPage() {
       return;
     }
 
-    const worksheet = XLSX.utils.json_to_sheet(applicants);
+    const worksheet = XLSX.utils.json_to_sheet(applicants.map(({ id, ...rest }) => rest));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Applicants");
     XLSX.writeFile(workbook, "KL_Radio_Applicants.xlsx");
@@ -106,7 +106,7 @@ export default function AdminPage() {
   };
 
 
-  if (!isMounted || user?.role !== "admin") {
+  if (loading || !isMounted || user?.role !== "admin") {
     return (
         <div className="flex justify-center items-center h-full">
             <Alert className="max-w-md">
@@ -177,19 +177,25 @@ export default function AdminPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-                <ul className="space-y-4">
-                    {posts.map(post => (
-                        <li key={post.id} className="flex items-start justify-between gap-4 border-l-4 border-primary pl-4 py-2 bg-secondary/50 rounded-r-md">
-                            <div className="flex-grow">
-                                <h4 className="font-bold">{post.title}</h4>
-                                <p className="text-sm text-muted-foreground">{post.content}</p>
-                            </div>
-                            <Button variant="ghost" size="icon" onClick={() => handleDeletePost(post.id)} aria-label="Delete post">
-                                <Trash2 className="h-4 w-4 text-destructive"/>
-                            </Button>
-                        </li>
-                    ))}
-                </ul>
+                {posts.length > 0 ? (
+                  <ul className="space-y-4">
+                      {posts.map(post => (
+                          <li key={post.id} className="flex items-start justify-between gap-4 border-l-4 border-primary pl-4 py-2 bg-secondary/50 rounded-r-md">
+                              <div className="flex-grow">
+                                  <h4 className="font-bold">{post.title}</h4>
+                                  <p className="text-sm text-muted-foreground">{post.content}</p>
+                              </div>
+                              <Button variant="ghost" size="icon" onClick={() => handleDeletePost(post.id)} aria-label="Delete post">
+                                  <Trash2 className="h-4 w-4 text-destructive"/>
+                              </Button>
+                          </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                      No announcements yet.
+                  </p>
+                )}
             </CardContent>
           </Card>
         </div>
@@ -252,7 +258,7 @@ export default function AdminPage() {
                         </TableHeader>
                         <TableBody>
                             {applicants.map((applicant) => (
-                                <TableRow key={applicant.regdId}>
+                                <TableRow key={applicant.id}>
                                     <TableCell>
                                         <div className="font-medium">{applicant.fullName}</div>
                                         <div className="text-xs text-muted-foreground">{applicant.email}</div>
@@ -261,7 +267,7 @@ export default function AdminPage() {
                                       <Badge variant="outline">{applicant.wing}</Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                      <Button variant="ghost" size="icon" onClick={() => handleDeleteApplicant(applicant.regdId)}>
+                                      <Button variant="ghost" size="icon" onClick={() => handleDeleteApplicant(applicant.id)}>
                                         <Trash2 className="h-4 w-4 text-destructive" />
                                       </Button>
                                     </TableCell>
@@ -281,3 +287,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
