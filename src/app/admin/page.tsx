@@ -237,7 +237,7 @@ export default function AdminPage() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Applicant</TableHead>
-                                <TableHead>Department</TableHead>
+                                <TableHead>Wing</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -248,7 +248,7 @@ export default function AdminPage() {
                                         <div className="text-xs text-muted-foreground">{applicant.email}</div>
                                     </TableCell>
                                     <TableCell>
-                                      <Badge variant="outline">{applicant.department}</Badge>
+                                      <Badge variant="outline">{applicant.wing}</Badge>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -266,3 +266,4 @@ export default function AdminPage() {
     </div>
   );
 }
+

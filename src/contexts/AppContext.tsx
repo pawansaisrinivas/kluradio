@@ -17,8 +17,12 @@ interface Post {
 
 export interface Applicant {
   fullName: string;
+  regdId: string;
   email: string;
+  mobileNumber: string;
   department: string;
+  regulation: string;
+  wing: string;
   reason: string;
 }
 
@@ -32,7 +36,7 @@ interface AppContextType {
   addPost: (post: Omit<Post, "id">) => void;
   deletePost: (postId: string) => void;
   toggleRecruitment: () => void;
-  addApplicant: (applicant: Applicant) => void;
+  addApplicant: (applicant: Omit<Applicant, 'otherDepartment'>) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
