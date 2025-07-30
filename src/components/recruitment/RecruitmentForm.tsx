@@ -26,7 +26,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
 import { useEffect } from "react";
-import { sendConfirmationEmail } from "@/ai/flows/send-confirmation-email";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -89,7 +88,7 @@ export default function RecruitmentForm() {
   }, [departmentValue, form]);
 
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
      const finalValues = {
       ...values,
       department: values.department === 'other' ? values.otherDepartment! : values.department,
@@ -99,18 +98,6 @@ export default function RecruitmentForm() {
       title: "Application Submitted! 🎉",
       description: "Thank you for your interest. We will be in touch soon.",
     });
-
-    try {
-      await sendConfirmationEmail({ name: values.fullName, email: values.email });
-      console.log("Confirmation email flow triggered successfully.");
-    } catch (error) {
-      console.error("Failed to trigger confirmation email flow:", error);
-       toast({
-        variant: "destructive",
-        title: "Email Error",
-        description: "Could not send confirmation email.",
-      });
-    }
 
     form.reset();
   }
