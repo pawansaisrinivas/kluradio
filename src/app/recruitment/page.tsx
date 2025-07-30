@@ -1,17 +1,29 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import RecruitmentForm from "@/components/recruitment/RecruitmentForm";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAppContext } from "@/contexts/AppContext";
 import { Loader2, PartyPopper, XCircle } from "lucide-react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function RecruitmentPage() {
-  const { recruitmentOpen, loading } = useAppContext();
+  const [recruitmentOpen, setRecruitmentOpen] = useState<boolean | null>(null);
 
-  // Show a loading state while we fetch the recruitment status
-  if (loading) {
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "settings", "recruitment"), (doc) => {
+      if (doc.exists()) {
+        setRecruitmentOpen(doc.data().isOpen);
+      } else {
+        setRecruitmentOpen(false);
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  if (recruitmentOpen === null) {
     return (
       <div className="flex justify-center items-center h-full py-12">
         <Alert className="max-w-md">
