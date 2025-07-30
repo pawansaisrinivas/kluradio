@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import * as XLSX from "xlsx";
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircle, FileText, Megaphone, PlusCircle, Trash2, Users } from "lucide-react";
+import { AlertCircle, Download, FileText, Megaphone, PlusCircle, Trash2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -74,6 +75,27 @@ export default function AdminPage() {
       description: "The announcement has been removed.",
     });
   };
+
+  const handleDownloadExcel = () => {
+    if (applicants.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "No Applicants",
+        description: "There is no applicant data to download.",
+      });
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(applicants);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Applicants");
+    XLSX.writeFile(workbook, "KL_Radio_Applicants.xlsx");
+     toast({
+        title: "Download Started",
+        description: "Your applicants list is downloading as an Excel file.",
+      });
+  };
+
 
   if (!isMounted || user?.role !== "admin") {
     return (
@@ -195,10 +217,16 @@ export default function AdminPage() {
 
            <Card>
             <CardHeader>
-               <CardTitle className="flex items-center gap-2">
-                <Users className="text-primary" />
-                Recruitment Applicants
-              </CardTitle>
+               <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="text-primary" />
+                  Recruitment Applicants
+                </CardTitle>
+                <Button variant="outline" size="sm" onClick={handleDownloadExcel} disabled={applicants.length === 0}>
+                  <Download className="mr-2 h-4 w-4" />
+                  Excel
+                </Button>
+              </div>
               <CardDescription>
                 View all applications submitted for open positions.
               </CardDescription>
