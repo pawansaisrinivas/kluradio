@@ -31,7 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export default function AdminPage() {
-  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants } = useAppContext();
+  const { user, addPost, deletePost, recruitmentOpen, toggleRecruitment, posts, applicants, deleteApplicant } = useAppContext();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -73,6 +73,15 @@ export default function AdminPage() {
       variant: "destructive",
       title: "Post Deleted",
       description: "The announcement has been removed.",
+    });
+  };
+  
+  const handleDeleteApplicant = (regdId: string) => {
+    deleteApplicant(regdId);
+    toast({
+      variant: "destructive",
+      title: "Applicant Deleted",
+      description: "The applicant has been removed from the list.",
     });
   };
 
@@ -238,17 +247,23 @@ export default function AdminPage() {
                             <TableRow>
                                 <TableHead>Applicant</TableHead>
                                 <TableHead>Wing</TableHead>
+                                <TableHead className="text-right">Action</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {applicants.map((applicant, index) => (
-                                <TableRow key={index}>
+                            {applicants.map((applicant) => (
+                                <TableRow key={applicant.regdId}>
                                     <TableCell>
                                         <div className="font-medium">{applicant.fullName}</div>
                                         <div className="text-xs text-muted-foreground">{applicant.email}</div>
                                     </TableCell>
                                     <TableCell>
                                       <Badge variant="outline">{applicant.wing}</Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                      <Button variant="ghost" size="icon" onClick={() => handleDeleteApplicant(applicant.regdId)}>
+                                        <Trash2 className="h-4 w-4 text-destructive" />
+                                      </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -266,4 +281,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

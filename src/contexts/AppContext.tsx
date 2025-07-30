@@ -37,6 +37,7 @@ interface AppContextType {
   deletePost: (postId: string) => void;
   toggleRecruitment: () => void;
   addApplicant: (applicant: Omit<Applicant, 'otherDepartment'>) => void;
+  deleteApplicant: (regdId: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -150,6 +151,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setApplicants((prevApplicants) => [...prevApplicants, applicant]);
   };
 
+  const deleteApplicant = (regdId: string) => {
+    setApplicants((prevApplicants) => prevApplicants.filter((applicant) => applicant.regdId !== regdId));
+  }
+
   const value = {
     user,
     posts,
@@ -161,6 +166,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     deletePost,
     toggleRecruitment,
     addApplicant,
+    deleteApplicant,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
